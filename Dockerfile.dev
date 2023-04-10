@@ -1,0 +1,32 @@
+# This dockerfile will only be used in a development environment
+# Since now the dockerfile is named differently as Dockerfile.dev
+# We'll need to run "docker build -f Dockerfile.dev . "
+# Note that "-f" means to use this specific file
+
+
+# Reference from a base image from hub
+FROM node:16-alpine
+
+# Create work directory in container for files to be copied into
+WORKDIR '/app'
+# Copy the below files to workdir
+COPY package.json .
+# Run the default command
+RUN npm install
+# After running the installation of dependencies, we'll then copy over the rest of the file system into workdir
+COPY . .
+
+#ADD command to start up project in image
+CMD ["npm", "run", "start"]
+
+# Run the following commands to build and start the react app
+# -- docker build -f Dockerfile.dev .
+# -- docker run -p 3000:3000 idOfImage   
+
+# USING DOCKER VOLUMES COMMAND FOR REAL TIME CHANGES WITHOUT REBUILD
+# In order to reflect any changes of code from src in real time , 
+# we can use Docker Volumes to map the files to a container in the run command, similar to mapping of ports
+# In this case, we're creating a placeholder volumes in container to map any changes in the src folder in our harddisk
+# -- docker run -p 3000:3000 -v/app/node_modules -v$(pwd):/app imageId
+# -- Explanation docker run -p 3000:3000 {-v Tell docket not to change this folder} 
+# {-v place this dir as placeholder to update changes : /app } imageId

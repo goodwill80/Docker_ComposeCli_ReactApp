@@ -1,0 +1,18 @@
+# 1. Specifying version
+version: '3'
+# 2. Specify what containers you want to build and run, provide any name
+#     -- note that we are implementing volumes as placeholder in container
+#     -- to be used to run real time changes by specifying folder not to be touched - i.e. node_modules
+#     -- and specifying folder to be used as placeholder volume
+#     -- we are also specifying the context as our dockerfile custom named dockerfile.dev
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - '3000:3000'
+    volumes:
+      - /app/node_modules
+      - .:/app
+# 3. Run command - docker-compose up
